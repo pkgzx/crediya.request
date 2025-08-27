@@ -1,0 +1,53 @@
+server:
+  port: 9090
+spring:
+  application:
+    name: "Request"
+  devtools:
+    add-properties: false
+  sql:
+    init:
+      mode: always
+  profiles:
+    include: null
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,prometheus"
+  endpoint:
+    health:
+      probes:
+        enabled: true
+cors:
+  allowed-origins: "http://localhost:4200,http://localhost:8080"
+
+routes:
+  paths:
+    state:
+      create: "/api/v1/state"
+
+#logging:
+#  level:
+#    org.springframework.r2dbc.core: DEBUG
+#    io.r2dbc.postgresql: DEBUG
+
+adapters:
+  r2dbc:
+    host: ${DB_HOST}
+    port: ${DB_PORT}
+    database: ${DB_NAME}
+    schema: ${DB_SCHEMA}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+
+springdoc:
+  swagger-ui:
+    path: /api/docs
+  version: 1.0.0
+  title: Request Service
+  description: API documentation for the Request Service
+  license:
+    name: GNU GENERAL PUBLIC LICENSE
+    url: https://www.gnu.org/licenses/gpl-3.0.txt
