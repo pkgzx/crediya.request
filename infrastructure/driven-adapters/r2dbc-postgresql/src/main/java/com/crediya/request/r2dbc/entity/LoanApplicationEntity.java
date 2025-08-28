@@ -4,23 +4,22 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.math.BigDecimal;
 
-@Table(name = "\"TypeLoan\"")
+@Table(name = "\"LoanApplication\"")
 @AllArgsConstructor()
 @NoArgsConstructor
 @Data
 @Builder
-public class TypeLoanEntity {
-  @Id
-  private Long id;
-  private String name;
-  private BigDecimal minAmount;
-  private BigDecimal maxAmount;
+public class LoanApplicationEntity {
+  private String id;
+  private BigDecimal amount;
   private String currency;
-  private Double interestRate;
-  private Boolean validationAutomatic;
+  private Integer term;
+  private String idUser;
+  private Long idState;
+  private Long idTypeLoan;
 }
+

@@ -23,7 +23,8 @@ public class StateUseCase {
   }
 
   public Mono<State> getStateById(Long id) {
-    return stateRepository.findById(id);
+    return stateRepository.findById(id)
+      .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.STATE_NOT_FOUND)));
   }
 
   private Mono<State> checkExistName(State state){

@@ -10,7 +10,19 @@ public enum TechnicalMessage {
   REQUEST_BODY_INVALID(400, "Request body is invalid.", "body"),
   STATE_NAME_INVALID(400, "State name is invalid. must contains almost 2 chars and max 200 chars", "name"),
   STATE_DESCRIPTION_INVALID(400, "State description is invalid. must contains max 255 chars ", "description"),
-  STATE_NAME_ALREADY_EXIST(409, "State name already exist.", "name")
+  STATE_NAME_ALREADY_EXIST(409, "State name already exist.", "name"),
+  TYPE_LOAN_NAME_INVALID(400, "Type loan name is invalid. must contains almost 2 chars and max 200 chars", "name"),
+  TYPE_LOAN_MIN_AMOUNT_INVALID(400, "Type loan minimum amount is invalid. must be greater than 0", "minAmount"),
+  INVALID_CURRENCY(400, "Invalid currency. Must be a valid ISO 4217 currency code.", "baseSalary.currency"),
+  TYPE_LOAN_VALIDATION_AUTOMATIC_INVALID(400, "Type loan validation automatic is invalid. must be true or false", "validationAutomatic"),
+  TYPE_LOAN_ALREADY_EXIST(409, "Type loan name already exist.", "name"),
+  EMAIL_USER_NOT_FOUND(404, "Email user not found.", "email"),
+  CLIENT_ERROR(400, "Client error occurred when communicating with external service.", "clientError"),
+  SERVER_ERROR(500, "Server error occurred in external service.", "serverError"),
+  TYPE_LOAN_TERM_INVALID(400, "Type loan term is invalid. must be greater than 0", "term"),
+  INVALID_EMAIL_FORMAT(400, "Invalid email format.", "email"),
+  TYPE_LOAN_NOT_FOUND(404, "Type loan not found.", "id"),
+  STATE_NOT_FOUND(404, "State not found.", "id")
   ;
 
 

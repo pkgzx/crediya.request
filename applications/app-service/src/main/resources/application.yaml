@@ -27,6 +27,10 @@ routes:
   paths:
     state:
       create: "/api/v1/state"
+    typeloan:
+      create: "/api/v1/typeloan"
+    loan-application:
+        create: "/api/v1/loan-application"
 
 #logging:
 #  level:
@@ -51,3 +55,7 @@ springdoc:
   license:
     name: GNU GENERAL PUBLIC LICENSE
     url: https://www.gnu.org/licenses/gpl-3.0.txt
+
+services:
+  auth:
+    url: ${AUTH_SERVICE_URL:http://localhost:8081}

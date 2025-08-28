@@ -7,7 +7,8 @@ public enum StringConstants {
   PASSWORD_PATTERN("^(?=.[a-z])(?=.[A-Z])(?=.\\d)(?=.[^\\da-zA-Z\\s])[^\\s]{8,}$"),
   PHONE_PATTERN("^[0-9]{7,15}$"),
   REFERENCE_CURRENCY("COP"),
-  IDENTIFICATION_PATTERN("^[a-zA-Z0-9]{1,20}$")
+  IDENTIFICATION_PATTERN("^[a-zA-Z0-9]{1,20}$"),
+  MAX_AMOUNT_TYPE_LOAN("900000000") // 900 COP millions
   ;
 
   private final String value;

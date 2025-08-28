@@ -4,7 +4,9 @@ import com.crediya.request.r2dbc.entity.TypeLoanEntity;
 import org.springframework.data.repository.query.ReactiveQueryByExampleExecutor;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Mono;
 
 @Repository
 public interface ITypeLoanPostgresRepository extends ReactiveCrudRepository<TypeLoanEntity, Long>, ReactiveQueryByExampleExecutor<TypeLoanEntity> {
+  Mono<TypeLoanEntity> findByName(String name);
 }

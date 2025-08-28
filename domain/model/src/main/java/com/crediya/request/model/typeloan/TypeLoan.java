@@ -10,6 +10,7 @@ import java.util.Currency;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
+@ToString
 public class TypeLoan {
     private Long id;
     private String name;

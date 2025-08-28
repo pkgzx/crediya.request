@@ -17,17 +17,17 @@ CREATE TABLE IF NOT EXISTS "TypeLoan" (
 );
 
 
-CREATE TABLE IF NOT EXISTS "Application" (
+CREATE TABLE IF NOT EXISTS "LoanApplication" (
     id VARCHAR(255) PRIMARY KEY,
     amount NUMERIC(19, 2) NOT NULL,
     currency VARCHAR(3) NOT NULL, -- ISO 4217 currency code
     term INTEGER NOT NULL, -- in months
-    id_user VARCHAR(100) NOT NULL,
-    state_id BIGINT NOT NULL,
-    type_loan_id BIGINT NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (state_id) REFERENCES "State"(id),
-    FOREIGN KEY (type_loan_id) REFERENCES "TypeLoan"(id)
+    id_user VARCHAR(200) NOT NULL,
+    id_state BIGINT NOT NULL,
+    id_type_loan BIGINT NOT NULL,
+--     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+--     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_state) REFERENCES "State"(id),
+    FOREIGN KEY (id_type_loan) REFERENCES "TypeLoan"(id)
 );
 
