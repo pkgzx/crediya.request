@@ -4,10 +4,8 @@ import com.crediya.request.model.state.State;
 import com.crediya.request.model.state.spi.IStateRepository;
 import com.crediya.request.usecase.enums.TechnicalMessage;
 import com.crediya.request.usecase.exception.BusinessException;
-import com.crediya.request.usecase.validation.StateValidor;
 import reactor.core.publisher.Mono;
 
-import java.util.Locale;
 
 public class StateUseCase {
   private final IStateRepository stateRepository;
@@ -15,10 +13,9 @@ public class StateUseCase {
   public StateUseCase(IStateRepository stateRepository) {
     this.stateRepository = stateRepository;
   }
+
   public Mono<State> createState(State state) {
-    return StateValidor.validName(state.getName())
-      .then(StateValidor.validDescription(state.getDescription()))
-      .then(checkExistName(state))
+    return checkExistName(state)
       .then(stateRepository.save(state));
   }
 
@@ -27,12 +24,9 @@ public class StateUseCase {
       .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.STATE_NOT_FOUND)));
   }
 
-  private Mono<State> checkExistName(State state){
+  private Mono<Void> checkExistName(State state) {
     return stateRepository.findByName(state.getName().toUpperCase())
-      .flatMap(exist -> exist != null
-        ? Mono.error(new BusinessException(TechnicalMessage.STATE_NAME_ALREADY_EXIST))
-        : Mono.just(state)
-      )
-      .switchIfEmpty(Mono.just(state));
+      .flatMap(found -> Mono.error(new BusinessException(TechnicalMessage.STATE_NAME_ALREADY_EXIST)).cast(Void.class))
+      .switchIfEmpty(Mono.empty());
   }
 }

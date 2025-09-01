@@ -20,6 +20,7 @@ public record StatePostgresPersistenceAdapter(IStatePostgresRepository repositor
   public Mono<State> findById(Long id) {
     return repository.findById(id)
       .map(mapper::toModel)
+      .switchIfEmpty(Mono.empty())
       .as(transactionalOperator::transactional);
   }
 
@@ -27,6 +28,7 @@ public record StatePostgresPersistenceAdapter(IStatePostgresRepository repositor
   public Mono<State> findByName(String name) {
     return repository.findByName(name)
       .map(mapper::toModel)
+      .switchIfEmpty(Mono.empty())
       .as(transactionalOperator::transactional);
   }
 }

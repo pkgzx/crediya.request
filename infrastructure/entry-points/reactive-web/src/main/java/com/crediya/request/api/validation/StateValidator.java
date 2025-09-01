@@ -1,16 +1,18 @@
-package com.crediya.request.usecase.validation;
+package com.crediya.request.api.validation;
 
 import com.crediya.request.usecase.enums.IntegerConstants;
 import com.crediya.request.usecase.enums.TechnicalMessage;
 import com.crediya.request.usecase.exception.BusinessException;
+import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-public class StateValidor {
-  private StateValidor() {
+@Component
+public class StateValidator {
+  private StateValidator() {
   }
 
 
-  public static Mono<Void> validName(String name) {
+  public  Mono<Void> validName(String name) {
     if (name == null || name.isBlank() || name.length() < IntegerConstants.MIN_STATE_NAME_LENGTH.value ||
       name.length() > IntegerConstants.MAX_STATE_NAME_LENGTH.value
     ) {
@@ -19,7 +21,7 @@ public class StateValidor {
     return Mono.empty();
   }
 
-  public static Mono<Void> validDescription(String description) {
+  public  Mono<Void> validDescription(String description) {
     if (description == null || description.isBlank()) {
       return Mono.error(new BusinessException(TechnicalMessage.STATE_DESCRIPTION_INVALID));
     }

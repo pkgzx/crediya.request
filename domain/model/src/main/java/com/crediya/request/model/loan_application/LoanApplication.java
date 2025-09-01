@@ -17,7 +17,13 @@ public class LoanApplication {
     private BigDecimal amount;
     private Currency currency;
     private Integer term; // in months
-    private UserDetails user;
-    private TypeLoan type;
-    private State state;
+    private UserDetails user; // dto: email ->  --amount
+                                                // term
+                                                // userDetails (null, null, null, "olvadis@gmail.com"
+                                                // solictud -> "olvadis@gmail.com" -> authentication
+                                                // userDetails(1, "olvadis", 28377373, "....")
+                                                // Entity: amount, term, id_user: 1
+                                                // term, amount, user: (1, "olvadis", 28377373, "....")
+    private TypeLoan type; // dto: type: 1 -> (id:1, name: null)
+    private State state; // dto: 1 -> (id:1, name: null)
 }

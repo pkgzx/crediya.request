@@ -3,7 +3,6 @@ package com.crediya.request.usecase.cases;
   import com.crediya.request.model.loan_application.LoanApplication;
   import com.crediya.request.model.loan_application.spi.ILoanApplicationRepository;
   import com.crediya.request.usecase.client.IUserClient;
-  import com.crediya.request.usecase.validation.LoanApplicationValidator;
   import reactor.core.publisher.Mono;
 
   public class LoanApplicationUseCase {
@@ -19,12 +18,8 @@ package com.crediya.request.usecase.cases;
         this.stateUseCase = stateUseCase;
       }
 
-      public Mono<LoanApplication> save(LoanApplication loanApplication) {
-        return LoanApplicationValidator.validateAmount(loanApplication.getAmount())
-          .then(LoanApplicationValidator.validateTerm(loanApplication.getTerm()))
-          .then(LoanApplicationValidator.validateEmail(loanApplication.getUser().email()))
-            .then(LoanApplicationValidator.validateCurrency(loanApplication.getCurrency().getCurrencyCode()))
-            .then(checkOtherEntities(loanApplication))
+      public Mono<LoanApplication> create(LoanApplication loanApplication) {
+        return checkOtherEntities(loanApplication)
              .then(userClient.getUserByEmail(loanApplication.getUser().email())
                   .flatMap(user -> {
                       loanApplication.setUser(user);
