@@ -1,7 +1,5 @@
 package com.crediya.request.api.exception;
 
-
-
 import com.crediya.request.api.dto.ErrorDto;
 import com.crediya.request.api.util.ErrorBuilder;
 import com.crediya.request.usecase.enums.TechnicalMessage;
