@@ -21,7 +21,7 @@ management:
       probes:
         enabled: true
 cors:
-  allowed-origins: "http://localhost:4200,http://localhost:8080"
+  allowed-origins: "http://localhost:4200,http://localhost:9090"
 
 routes:
   paths:
@@ -31,11 +31,13 @@ routes:
       create: "/api/v1/typeloan"
     loan-application:
         create: "/api/v1/loan-application"
+        paginated: "/api/v1/loan-application/paginated"
 
-#logging:
-#  level:
+logging:
+  level:
 #    org.springframework.r2dbc.core: DEBUG
-#    io.r2dbc.postgresql: DEBUG
+    io.r2dbc.postgresql: DEBUG
+
 
 adapters:
   r2dbc:

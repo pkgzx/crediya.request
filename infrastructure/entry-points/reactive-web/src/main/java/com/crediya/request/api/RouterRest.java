@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.RouterOperation;
 import org.springdoc.core.annotations.RouterOperations;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
+import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
@@ -45,11 +47,15 @@ public class RouterRest {
                             method = {RequestMethod.POST},
                             beanClass = StateHandler.class,
                             beanMethod = "listenCreateState",
+
                             operation = @Operation(
                                     operationId = "createState",
                                     tags = {"State"},
                                     summary = "Create a new state",
                                     description = "Create a new state",
+                              security = {
+                                @SecurityRequirement(name = "bearerAuth")
+                              },
                               requestBody = @RequestBody(
                                 required = true,
                                 content = @Content(schema = @Schema(implementation = CreateStateDto.class))
@@ -70,6 +76,9 @@ public class RouterRest {
                             operation = @Operation(
                                     operationId = "createTypeLoan",
                                     tags = {"Type Loan"},
+                              security = {
+                                @SecurityRequirement(name = "bearerAuth")
+                              },
                                     summary = "Create a new type loan",
                                     description = "Create a new type loan",
                                     requestBody = @RequestBody(
@@ -94,6 +103,9 @@ public class RouterRest {
                                     tags = {"Loan Application"},
                                     summary = "Create a new loan application",
                                     description = "Create a new loan application",
+                              security = {
+                                @SecurityRequirement(name = "bearerAuth")
+                              },
                                     requestBody = @RequestBody(
                                             required = true,
                                             content = @Content(schema = @Schema(implementation = CreateLoanApplicationDto.class))
@@ -113,6 +125,7 @@ public class RouterRest {
         return route(POST(statePath.getCreate()), stateHandler::listenCreateState)
           .andRoute(POST(typeLoanPath.getCreate()), typeLoanHandler::saveTypeLoan)
           .andRoute(POST(loanApplicationPath.getCreate()), loanApplicationHandler::listenCreateLoan)
+          .andRoute(GET(loanApplicationPath.getPaginated()), loanApplicationHandler::findAllPaginated)
           .filter(globalWebExceptionHandler);
     }
 }

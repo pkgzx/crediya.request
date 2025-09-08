@@ -22,7 +22,8 @@ public enum TechnicalMessage {
   TYPE_LOAN_TERM_INVALID(400, "Type loan term is invalid. must be greater than 0", "term"),
   INVALID_EMAIL_FORMAT(400, "Invalid email format.", "email"),
   TYPE_LOAN_NOT_FOUND(404, "Type loan not found.", "id"),
-  STATE_NOT_FOUND(404, "State not found.", "id")
+  STATE_NOT_FOUND(404, "State not found.", "id"),
+  UNAUTHORIZED_ACCESS(401, "Unauthorized Access", "")
   ;
 
 

@@ -1,6 +1,7 @@
 package com.crediya.request.api.mapper;
 
 import com.crediya.request.api.dto.CreateLoanApplicationDto;
+import com.crediya.request.api.dto.LoanApplicationDetailsDto;
 import com.crediya.request.model.loan_application.LoanApplication;
 import com.crediya.request.model.loan_application.UserDetails;
 import com.crediya.request.model.state.State;
@@ -25,6 +26,15 @@ public interface ILoanApplicationMapper {
     }
 
     default UserDetails mapUser(String email) {
-        return new UserDetails(null, null, null, null, email);
+        return new UserDetails(null, null, null, null, email, null);
     }
+
+    @Mapping(target  = "type", source = "model.type.name")
+    @Mapping(target  = "interestRate", source = "model.type.interestRate")
+    @Mapping(target  = "state", source = "state.name")
+    @Mapping(target  = "name", source = "user.name")
+    @Mapping(target  = "email", source = "user.email")
+    @Mapping(target = "baseSalary", source= "user.baseSalary.value")
+    LoanApplicationDetailsDto toDetailDto(LoanApplication model);
 }
+

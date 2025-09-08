@@ -1,7 +1,7 @@
-package com.crediya.request.api.client;
+package com.crediya.request.restclient.config;
 
-import com.crediya.request.usecase.client.IUserClient;
 import com.crediya.request.model.loan_application.UserDetails;
+import com.crediya.request.usecase.client.IUserClient;
 import com.crediya.request.usecase.enums.TechnicalMessage;
 import com.crediya.request.usecase.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,4 +30,18 @@ public class UserClient implements IUserClient {
             response -> Mono.error(new BusinessException(TechnicalMessage.SERVER_ERROR)))
                 .bodyToMono(UserDetails.class);
     }
+
+  @Override
+  public Mono<UserDetails> getUserById(String id) {
+    return webClient.get()
+      .uri("/users/id/{id}", id)
+      .retrieve()
+      .onStatus(status -> status.value() == 404,
+        response -> Mono.error(new BusinessException(TechnicalMessage.EMAIL_USER_NOT_FOUND)))
+      .onStatus(HttpStatusCode::is4xxClientError,
+        response -> Mono.error(new BusinessException(TechnicalMessage.CLIENT_ERROR)))
+      .onStatus(HttpStatusCode::is5xxServerError,
+        response -> Mono.error(new BusinessException(TechnicalMessage.SERVER_ERROR)))
+      .bodyToMono(UserDetails.class);
+  }
 }

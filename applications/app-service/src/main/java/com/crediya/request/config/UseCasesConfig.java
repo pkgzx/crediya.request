@@ -19,6 +19,7 @@ import com.crediya.request.usecase.client.IUserClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.transaction.reactive.TransactionalOperator;
 
 @Configuration
@@ -32,6 +33,7 @@ public class UseCasesConfig {
   private final ILoanApplicationPostgresRepository loanApplicationPostgresRepository;
   private final ILoanApplicationPersistenceMapper loanApplicationPersistenceMapper;
   private final TransactionalOperator transactionalOperator;
+  private final R2dbcEntityTemplate  r2dbcEntityTemplate;
 
   @Bean
   public StatePostgresPersistenceAdapter getStatePostgresRepository() {
@@ -56,7 +58,7 @@ public class UseCasesConfig {
 
   @Bean
   public LoanApplicationPostgresPersistenceAdapter getLoanApplicationPostgresRepository() {
-    return new LoanApplicationPostgresPersistenceAdapter(loanApplicationPostgresRepository, loanApplicationPersistenceMapper, transactionalOperator);
+    return new LoanApplicationPostgresPersistenceAdapter(r2dbcEntityTemplate, loanApplicationPostgresRepository, loanApplicationPersistenceMapper, transactionalOperator);
   }
 
 

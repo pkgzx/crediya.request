@@ -5,4 +5,5 @@ import reactor.core.publisher.Mono;
 
 public interface IUserClient {
   Mono<UserDetails> getUserByEmail(String email);
+  Mono<UserDetails> getUserById(String id);
 }

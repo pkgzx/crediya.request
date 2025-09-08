@@ -1,6 +1,7 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
+	implementation project(':rest-client')
 	implementation project(':reactive-web')
 	implementation 'org.reactivecommons.utils:object-mapper:0.1.0'
     implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
@@ -11,6 +12,10 @@ dependencies {
     runtimeOnly('org.springframework.boot:spring-boot-devtools')
     testImplementation 'com.tngtech.archunit:archunit:1.4.1'
     testImplementation 'com.fasterxml.jackson.core:jackson-databind'
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
 }
 
 tasks.register('explodedJar', Copy) {

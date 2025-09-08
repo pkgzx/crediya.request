@@ -27,6 +27,7 @@ public interface ILoanApplicationPersistenceMapper {
   @Mapping(target = "term", source = "entity.term")
   @Mapping(target = "state", expression = "java(mapState(entity.getIdState()))")
   @Mapping(target = "type", expression = "java(mapType(entity.getIdTypeLoan()))")
+  @Mapping(target = "user", expression = "java(mapUser(entity.getIdUser()))")
   LoanApplication toModel(LoanApplicationEntity entity);
 
 
@@ -50,8 +51,10 @@ public interface ILoanApplicationPersistenceMapper {
       .build();
   }
 
+
+
     default UserDetails mapUser(String userId) {
-        return new UserDetails(userId, null, null, null, null);
+        return new UserDetails(userId, null, null, null, null, null);
     }
 
     default State mapState(Long stateId) {
