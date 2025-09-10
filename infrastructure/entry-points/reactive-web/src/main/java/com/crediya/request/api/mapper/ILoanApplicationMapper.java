@@ -35,6 +35,7 @@ public interface ILoanApplicationMapper {
     @Mapping(target  = "name", source = "user.name")
     @Mapping(target  = "email", source = "user.email")
     @Mapping(target = "baseSalary", source= "user.baseSalary.value")
+    @Mapping(target = "monthlyFee", expression = "java(java.math.BigDecimal.ZERO)")
     LoanApplicationDetailsDto toDetailDto(LoanApplication model);
 }
 

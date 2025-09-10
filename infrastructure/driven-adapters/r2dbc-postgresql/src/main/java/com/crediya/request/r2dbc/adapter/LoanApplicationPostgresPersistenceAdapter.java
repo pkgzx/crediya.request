@@ -73,4 +73,15 @@ public Mono<PagedResult<LoanApplication>> findAllPaged(Pagination pagination, Fi
     return Mono.just(QueryBuilder.buildCountQuery(filterCriteria))
       .flatMap(query -> template.count(query, LoanApplicationEntity.class));
   }
+
+  @Override
+  public Mono<LoanApplication> findById(String id) {
+    return repository.findById(id)
+      .map(mapper::toModel);
+  }
+
+  @Override
+  public Mono<Integer> updateStateById(String id, Long idState) {
+    return repository.updateStateById(idState, id);
+  }
 }

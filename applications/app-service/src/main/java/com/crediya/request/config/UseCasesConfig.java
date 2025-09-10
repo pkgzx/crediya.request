@@ -12,6 +12,7 @@ import com.crediya.request.r2dbc.mapper.ITypeLoanPersistenceMapper;
 import com.crediya.request.r2dbc.repository.ILoanApplicationPostgresRepository;
 import com.crediya.request.r2dbc.repository.IStatePostgresRepository;
 import com.crediya.request.r2dbc.repository.ITypeLoanPostgresRepository;
+import com.crediya.request.sqs.SqsAdapter;
 import com.crediya.request.usecase.cases.LoanApplicationUseCase;
 import com.crediya.request.usecase.cases.StateUseCase;
 import com.crediya.request.usecase.cases.TypeLoanUseCase;
@@ -34,6 +35,7 @@ public class UseCasesConfig {
   private final ILoanApplicationPersistenceMapper loanApplicationPersistenceMapper;
   private final TransactionalOperator transactionalOperator;
   private final R2dbcEntityTemplate  r2dbcEntityTemplate;
+  private final SqsAdapter  sqsAdapter;
 
   @Bean
   public StatePostgresPersistenceAdapter getStatePostgresRepository() {
@@ -64,7 +66,7 @@ public class UseCasesConfig {
 
   @Bean
   public LoanApplicationUseCase getLoanApplicationUseCase(ILoanApplicationRepository loanApplicationRepository, IUserClient userClient, TypeLoanUseCase typeLoanUseCase, StateUseCase stateUseCase) {
-    return new LoanApplicationUseCase(loanApplicationRepository, userClient, typeLoanUseCase, stateUseCase);
+    return new LoanApplicationUseCase(loanApplicationRepository, userClient, typeLoanUseCase, stateUseCase, sqsAdapter);
   }
 
 

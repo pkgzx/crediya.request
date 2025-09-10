@@ -24,14 +24,18 @@ public class SecurityConfig {
           "/api/docs",
           "/webjars/swagger-ui/**",
           "/favicon.ico",
-          "/v3/api-docs/swagger-config",
-          "/api/v1/loan-application/paginated"
-
+          "/v3/api-docs/swagger-config"
         ).permitAll()
         .pathMatchers(
           "/api/v1/loan-application"
 
         ).hasAnyRole("CLIENT")
+
+        .pathMatchers(
+          "/api/v1/loan-application/paginated",
+          "/api/v1/loan-application/*"
+        )
+        .hasAnyRole("ADMIN", "ADVISOR")
         .anyExchange().authenticated()
       )
       .addFilterAfter(jwtFilter, SecurityWebFiltersOrder.FIRST)

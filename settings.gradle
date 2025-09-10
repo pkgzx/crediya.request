@@ -26,3 +26,5 @@ include ':reactive-web'
 project(':reactive-web').projectDir = file('./infrastructure/entry-points/reactive-web')
 include ':rest-client'
 project(':rest-client').projectDir = file('./infrastructure/driven-adapters/rest-client')
+include ':sqs'
+project(':sqs').projectDir = file('./infrastructure/driven-adapters/sqs')

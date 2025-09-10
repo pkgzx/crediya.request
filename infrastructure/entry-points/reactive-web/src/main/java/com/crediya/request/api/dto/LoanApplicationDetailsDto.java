@@ -13,6 +13,7 @@ public record LoanApplicationDetailsDto(
     String name,
     String email,
     Integer term,
-    BigDecimal baseSalary
+    BigDecimal baseSalary,
+    BigDecimal monthlyFee
 ) {
 }

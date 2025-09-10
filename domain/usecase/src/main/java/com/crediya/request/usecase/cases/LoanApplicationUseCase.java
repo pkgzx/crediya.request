@@ -5,6 +5,8 @@ package com.crediya.request.usecase.cases;
   import com.crediya.request.model.criteria.Pagination;
   import com.crediya.request.model.loan_application.LoanApplication;
   import com.crediya.request.model.loan_application.spi.ILoanApplicationRepository;
+  import com.crediya.request.model.notification.LoanApplicationStatusChangedEvent;
+  import com.crediya.request.model.notification.spi.INotificationClient;
   import com.crediya.request.usecase.client.IUserClient;
   import com.crediya.request.usecase.enums.TechnicalMessage;
   import com.crediya.request.usecase.exception.BusinessException;
@@ -18,12 +20,14 @@ public class LoanApplicationUseCase {
       private final IUserClient userClient;
       private final TypeLoanUseCase typeLoanUseCase;
       private final StateUseCase stateUseCase;
+      private final INotificationClient  notificationClient;
 
-      public LoanApplicationUseCase(ILoanApplicationRepository repository, IUserClient userClient, TypeLoanUseCase typeLoanUseCase, StateUseCase stateUseCase) {
+      public LoanApplicationUseCase(ILoanApplicationRepository repository, IUserClient userClient, TypeLoanUseCase typeLoanUseCase, StateUseCase stateUseCase, INotificationClient notificationClient) {
           this.repository = repository;
           this.userClient = userClient;
         this.typeLoanUseCase = typeLoanUseCase;
         this.stateUseCase = stateUseCase;
+        this.notificationClient = notificationClient;
       }
 
       public Mono<LoanApplication> create(LoanApplication loanApplication, String subject) {
@@ -91,6 +95,36 @@ public class LoanApplicationUseCase {
             .hasPrevious(result.isHasPrevious())
             .build()
           )
+      );
+
+
+  }
+
+  public Mono<Void> changeStatus(String idLoanApplication, Long idStatus) {
+    return repository.findById(idLoanApplication)
+      .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.LOAN_APPLICATION_NOT_FOUND)))
+      .flatMap(loanApplication ->
+        stateUseCase.getStateById(idStatus)
+          .switchIfEmpty(Mono.error(new BusinessException(TechnicalMessage.STATE_NOT_FOUND)))
+          .flatMap(state -> {
+            loanApplication.setState(state);
+            return repository.updateStateById(idLoanApplication, idStatus)
+              .then(userClient.getUserById(loanApplication.getUser().id())
+                .flatMap(userDetails -> {
+                  loanApplication.setUser(userDetails);
+                  var event = new LoanApplicationStatusChangedEvent(
+                    loanApplication.getId(),
+                    userDetails.email(),
+                    state.getName(),
+                    String.valueOf(System.currentTimeMillis()),
+                    loanApplication.getAmount(),
+                    userDetails.name(),
+                    userDetails.id()
+                  );
+                  return notificationClient.sendNotification(event);
+                })
+              );
+          })
       );
   }
   }

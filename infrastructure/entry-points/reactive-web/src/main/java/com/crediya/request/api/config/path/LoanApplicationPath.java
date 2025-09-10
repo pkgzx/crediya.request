@@ -10,4 +10,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class LoanApplicationPath {
     private String create;
     private String paginated;
+    private String changeStatus;
 }

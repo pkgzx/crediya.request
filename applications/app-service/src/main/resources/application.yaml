@@ -30,13 +30,14 @@ routes:
     typeloan:
       create: "/api/v1/typeloan"
     loan-application:
-        create: "/api/v1/loan-application"
-        paginated: "/api/v1/loan-application/paginated"
+      create: "/api/v1/loan-application"
+      paginated: "/api/v1/loan-application/paginated"
+      change-status: "/api/v1/loan-application/{id}"
 
-logging:
-  level:
+#logging:
+#  level:
 #    org.springframework.r2dbc.core: DEBUG
-    io.r2dbc.postgresql: DEBUG
+#    io.r2dbc.postgresql: DEBUG
 
 
 adapters:
@@ -61,3 +62,10 @@ springdoc:
 services:
   auth:
     url: ${AUTH_SERVICE_URL:http://localhost:8081}
+
+aws:
+  sqs:
+    region: ${SQS_REGION}
+    accessKey: ${SQS_ACCESS_KEY}
+    secretKey: ${SQS_SECRET_KEY}
+    queueName: ${SQS_LOAN_APPLICATION_STATUS_QUEUE_NAME}

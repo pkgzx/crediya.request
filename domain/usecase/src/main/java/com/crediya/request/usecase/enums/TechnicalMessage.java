@@ -23,7 +23,9 @@ public enum TechnicalMessage {
   INVALID_EMAIL_FORMAT(400, "Invalid email format.", "email"),
   TYPE_LOAN_NOT_FOUND(404, "Type loan not found.", "id"),
   STATE_NOT_FOUND(404, "State not found.", "id"),
-  UNAUTHORIZED_ACCESS(401, "Unauthorized Access", "")
+  UNAUTHORIZED_ACCESS(401, "Unauthorized Access", ""),
+  PAGE_OR_SIZE_TOO_LARGE(400, "Page or size over range", ""),
+  LOAN_APPLICATION_NOT_FOUND(404, "Loan application not found.", "id"),
   ;
 
 

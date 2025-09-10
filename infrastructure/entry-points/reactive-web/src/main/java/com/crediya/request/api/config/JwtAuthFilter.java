@@ -1,7 +1,10 @@
 package com.crediya.request.api.config;
 
+import com.crediya.request.api.dto.ErrorDto;
+import com.crediya.request.api.util.ErrorBuilder;
 import com.crediya.request.model.auth.Auth;
 import com.crediya.request.model.auth.spi.IAuthClient;
+import com.crediya.request.usecase.exception.BusinessException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -34,8 +37,7 @@ public class JwtAuthFilter implements WebFilter {
       path.startsWith("/api/webjars/swagger-ui") ||
       path.equals("/api/docs") ||
       path.startsWith("/webjars/swagger-ui") ||
-      path.equals("/favicon.ico") ||
-      path.startsWith("/api/v1/loan-application/paginated")
+      path.equals("/favicon.ico")
     ) {
       return chain.filter(exchange);
     }
@@ -54,6 +56,11 @@ public class JwtAuthFilter implements WebFilter {
         Authentication authentication = createAuthentication(user);
         return chain.filter(exchange)
           .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
+      })
+      .onErrorResume(BusinessException.class, ex -> {
+        log.error("BusinessException occurred: {}", ex.getMessage());
+        exchange.getResponse().setStatusCode(HttpStatus.resolve(ex.getTechnicalMessage().getCode()));
+        return exchange.getResponse().setComplete();
       })
       .onErrorResume(e -> {
         log.error("Error validando token", e);

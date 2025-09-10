@@ -3,6 +3,7 @@ package com.crediya.request.api;
 import com.crediya.request.api.config.path.LoanApplicationPath;
 import com.crediya.request.api.config.path.StatePath;
 import com.crediya.request.api.config.path.TypeLoanPath;
+import com.crediya.request.api.dto.ChangeStatusLoanApplicationDto;
 import com.crediya.request.api.dto.CreateLoanApplicationDto;
 import com.crediya.request.api.dto.CreateStateDto;
 import com.crediya.request.api.dto.CreateTypeLoanDto;
@@ -25,8 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
-import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
-import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
+import static org.springframework.web.reactive.function.server.RequestPredicates.*;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 @Configuration
@@ -116,7 +116,32 @@ public class RouterRest {
                                                     content = @Content(mediaType = "application/json"))
                                     }
                             )
-                    )
+                    ),
+
+              @RouterOperation(
+                path = "/api/v1/loan-application",
+                method = {RequestMethod.PUT},
+                beanClass = LoanApplicationHandler.class,
+                beanMethod = "handleChangeStatus",
+                operation = @Operation(
+                  operationId = "Change Status Loan Application",
+                  tags = {"Loan Application"},
+                  summary = "Change Status Loan Application by id",
+                  description = "Change Status Loan Application",
+                  security = {
+                    @SecurityRequirement(name = "bearerAuth")
+                  },
+                  requestBody = @RequestBody(
+                    required = true,
+                    content = @Content(schema = @Schema(implementation = ChangeStatusLoanApplicationDto.class))
+                  ),
+                  responses = {
+                    @ApiResponse(responseCode = "201", description = "Created Status success"),
+                    @ApiResponse(responseCode = "400", description = "Invalid input",
+                      content = @Content(mediaType = "application/json"))
+                  }
+                )
+              )
 
             }
     )
@@ -126,6 +151,7 @@ public class RouterRest {
           .andRoute(POST(typeLoanPath.getCreate()), typeLoanHandler::saveTypeLoan)
           .andRoute(POST(loanApplicationPath.getCreate()), loanApplicationHandler::listenCreateLoan)
           .andRoute(GET(loanApplicationPath.getPaginated()), loanApplicationHandler::findAllPaginated)
+          .andRoute(PUT(loanApplicationPath.getChangeStatus()), loanApplicationHandler::handleChangeStatus)
           .filter(globalWebExceptionHandler);
     }
 }

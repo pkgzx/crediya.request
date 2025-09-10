@@ -1,5 +1,6 @@
 package com.crediya.request.api.handler;
 
+import com.crediya.request.api.dto.ChangeStatusLoanApplicationDto;
 import com.crediya.request.api.dto.CreateLoanApplicationDto;
 import com.crediya.request.api.dto.LoanApplicationDetailsDto;
 import com.crediya.request.api.mapper.ILoanApplicationMapper;
@@ -50,8 +51,15 @@ public class LoanApplicationHandler {
   }
 
   public Mono<ServerResponse> findAllPaginated(ServerRequest serverRequest) {
-    Integer page = serverRequest.queryParam("page").map(Integer::parseInt).orElse(0);
-    Integer size = serverRequest.queryParam("size").map(Integer::parseInt).orElse(10);
+    String pageParam = serverRequest.queryParam("page").orElse("0");
+    String sizeParam = serverRequest.queryParam("size").orElse("10");
+
+    if (!pageParam.matches("\\d{1,10}") || !sizeParam.matches("\\d{1,10}")) {
+      throw new BusinessException(TechnicalMessage.PAGE_OR_SIZE_TOO_LARGE);
+    }
+
+    int page = Integer.parseInt(pageParam);
+    int size = Integer.parseInt(sizeParam);
     String sort  = serverRequest.queryParam("sort").map(String::toLowerCase).orElse(null);
     String search = serverRequest.queryParam("search").map(String::toLowerCase).orElse(null);
 
@@ -112,5 +120,25 @@ return loanApplicationUseCase.findAllPaginated(pagination, filterCriteria)
         return new Sort(field, direction);
       })
       .toList();
+  }
+
+  public Mono<ServerResponse> handleChangeStatus(ServerRequest serverRequest) {
+    String idLoanApplication = serverRequest.pathVariable("id");
+    return serverRequest.bodyToMono(ChangeStatusLoanApplicationDto.class)
+      .flatMap(body -> {
+        if (body == null) {
+          return Mono.error(new BusinessException(TechnicalMessage.REQUEST_BODY_INVALID));
+        }
+        try {
+          long idStatus = body.idStatus();
+          if (idStatus < 0 || idStatus > Long.MAX_VALUE) {
+            return Mono.error(new NumberFormatException());
+          }
+          return loanApplicationUseCase.changeStatus(idLoanApplication, idStatus)
+            .then(ServerResponse.ok().build());
+        } catch (NumberFormatException e) {
+          return Mono.error(new BusinessException(TechnicalMessage.STATE_NOT_FOUND));
+        }
+      });
   }
 }

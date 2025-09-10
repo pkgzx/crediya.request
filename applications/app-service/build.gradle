@@ -1,6 +1,7 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
+	implementation project(':sqs')
 	implementation project(':rest-client')
 	implementation project(':reactive-web')
 	implementation 'org.reactivecommons.utils:object-mapper:0.1.0'
@@ -27,6 +28,8 @@ jar {
     // To disable the *-plain.jar
     enabled = false
 }
+
+
 
 bootJar {
     // Sets output jar name

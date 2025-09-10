@@ -10,4 +10,7 @@ public interface ILoanApplicationRepository {
   Mono<LoanApplication> save(LoanApplication loanApplication);
   Mono<PagedResult<LoanApplication>> findAllPaged(Pagination pagination, FilterCriteria filterCriteria);
    Mono<Long> count(FilterCriteria filterCriteria);
+   Mono<LoanApplication> findById(String id);
+
+  Mono<Integer> updateStateById(String id, Long idState);
 }
